@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Панель модерации</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -17,8 +17,8 @@
         </div>
 
         <div class="user-input-section">
-            <label for="user-id">ID пользователя или @username:</label>
-            <input type="text" id="user-id" placeholder="ID или @username">
+            <label for="user-id">ID пользователя:</label>
+            <input type="text" id="user-id" placeholder="ID пользователя">
             <label for="reason">Причина:</label>
             <input type="text" id="reason" placeholder="Например: Спам">
             <label for="time">Время (0s для перманентного бана):</label>
@@ -39,6 +39,6 @@
             <p>Здесь будут отображаться результаты команд.</p>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
