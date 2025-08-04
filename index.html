@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель модерации</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Панель модерации</h1>
+
+        <div class="group-select">
+            <label for="group-list">Выберите группу:</label>
+            <select id="group-list"></select>
+        </div>
+
+        <div class="user-input-section">
+            <label for="user-id">ID пользователя или @username:</label>
+            <input type="text" id="user-id" placeholder="ID или @username">
+            <label for="reason">Причина:</label>
+            <input type="text" id="reason" placeholder="Например: Спам">
+            <label for="time">Время (0s для перманентного бана):</label>
+            <input type="text" id="time" placeholder="Например: 1h, 30m, 1d">
+        </div>
+
+        <div class="controls">
+            <button id="warn-btn">Warn</button>
+            <button id="unwarn-btn">Unwarn</button>
+            <button id="mute-btn">Mute</button>
+            <button id="kick-btn">Kick</button>
+            <button id="ban-btn">Ban</button>
+            <button id="unban-btn">Unban</button>
+        </div>
+
+        <div class="logs" id="logs">
+            <h2>Логи</h2>
+            <p>Здесь будут отображаться результаты команд.</p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
