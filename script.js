@@ -2,9 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const userIdInput = document.getElementById('user-id');
     const reasonInput = document.getElementById('reason');
     const timeInput = document.getElementById('time');
+    const groupList = document.getElementById('group-list');
     const logs = document.getElementById('logs');
-
-    // Кнопки
+    
     const warnBtn = document.getElementById('warn-btn');
     const unwarnBtn = document.getElementById('unwarn-btn');
     const muteBtn = document.getElementById('mute-btn');
@@ -21,27 +21,46 @@ document.addEventListener('DOMContentLoaded', () => {
         logs.scrollTop = logs.scrollHeight;
     }
 
-    // Заглушка для имитации отправки данных на сервер
+    // Заполнение списка групп
+    // В реальном приложении этот список должен передаваться из бота
+    // Для демонстрации используем заглушку
+    const mockGroups = [
+        { id: '-100223456789', title: 'Пример группы 1' },
+        { id: '-100987654321', title: 'Пример группы 2' }
+    ];
+    
+    if (mockGroups.length > 0) {
+        mockGroups.forEach(group => {
+            const option = document.createElement('option');
+            option.value = group.id;
+            option.textContent = group.title;
+            groupList.appendChild(option);
+        });
+    } else {
+        const option = document.createElement('option');
+        option.textContent = "Нет доступных групп";
+        groupList.appendChild(option);
+        groupList.disabled = true;
+    }
+
+    // Функция для отправки данных на сервер
     async function sendAction(action, data) {
-        // Здесь должен быть URL вашего бэкенда, который будет обрабатывать команды
-        const backendUrl = 'https://your-backend-api.com/moderation'; 
-
+        // Используем относительный путь, так как Flask-сервер будет
+        // обслуживать и веб-приложение, и API в одном домене.
+        // Замените этот URL на реальный адрес вашего хостинга, если он отличается от GitHub Pages.
+        const backendUrl = 'https://mechanikrulesbot.github.io/moderation'; 
+        
         logMessage(`Отправка команды "${action}"...`);
-
+        
         try {
-            // В реальном приложении здесь будет запрос к вашему бэкенду
-            // const response = await fetch(backendUrl, {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ action, ...data })
-            // });
+            const response = await fetch(backendUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
 
-            // const result = await response.json();
-
-            // Имитация ответа
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            const result = { success: true, message: `Команда "${action}" выполнена успешно.` };
-
+            const result = await response.json();
+            
             if (result.success) {
                 logMessage(`Успех: ${result.message}`, 'success');
             } else {
@@ -56,21 +75,22 @@ document.addEventListener('DOMContentLoaded', () => {
     warnBtn.addEventListener('click', () => {
         const userId = userIdInput.value;
         const reason = reasonInput.value;
-        if (userId && reason) {
-            sendAction('warn', { userId, reason });
+        const chatId = groupList.value;
+        if (userId && reason && chatId) {
+            sendAction('warn', { userId, reason, chatId });
         } else {
-            logMessage('Введите ID пользователя и причину.', 'error');
+            logMessage('Введите ID пользователя, причину и выберите группу.', 'error');
         }
     });
 
     unwarnBtn.addEventListener('click', () => {
         const userId = userIdInput.value;
-        const reason = reasonInput.value;
-        const amount = 1; // Упрощенно, снимаем 1 предупреждение
-        if (userId && reason) {
-            sendAction('unwarn', { userId, reason, amount });
+        const reason = reasonInput.value || 'Не указана';
+        const chatId = groupList.value;
+        if (userId && chatId) {
+            sendAction('unwarn', { userId, reason, chatId });
         } else {
-            logMessage('Введите ID пользователя и причину.', 'error');
+            logMessage('Введите ID пользователя и выберите группу.', 'error');
         }
     });
 
@@ -78,20 +98,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const userId = userIdInput.value;
         const reason = reasonInput.value;
         const time = timeInput.value;
-        if (userId && reason && time) {
-            sendAction('mute', { userId, reason, time });
+        const chatId = groupList.value;
+        if (userId && reason && time && chatId) {
+            sendAction('mute', { userId, reason, time, chatId });
         } else {
-            logMessage('Введите ID пользователя, причину и время.', 'error');
+            logMessage('Введите ID пользователя, причину, время и выберите группу.', 'error');
         }
     });
 
     kickBtn.addEventListener('click', () => {
         const userId = userIdInput.value;
         const reason = reasonInput.value;
-        if (userId && reason) {
-            sendAction('kick', { userId, reason });
+        const chatId = groupList.value;
+        if (userId && reason && chatId) {
+            sendAction('kick', { userId, reason, chatId });
         } else {
-            logMessage('Введите ID пользователя и причину.', 'error');
+            logMessage('Введите ID пользователя, причину и выберите группу.', 'error');
         }
     });
 
@@ -99,20 +121,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const userId = userIdInput.value;
         const reason = reasonInput.value;
         const time = timeInput.value;
-        if (userId && reason && time) {
-            sendAction('ban', { userId, reason, time });
+        const chatId = groupList.value;
+        if (userId && reason && time && chatId) {
+            sendAction('ban', { userId, reason, time, chatId });
         } else {
-            logMessage('Введите ID пользователя, причину и время.', 'error');
+            logMessage('Введите ID пользователя, причину, время и выберите группу.', 'error');
         }
     });
 
     unbanBtn.addEventListener('click', () => {
         const userId = userIdInput.value;
         const reason = reasonInput.value || 'Не указана';
-        if (userId) {
-            sendAction('unban', { userId, reason });
+        const chatId = groupList.value;
+        if (userId && chatId) {
+            sendAction('unban', { userId, reason, chatId });
         } else {
-            logMessage('Введите ID пользователя.', 'error');
+            logMessage('Введите ID пользователя и выберите группу.', 'error');
         }
     });
 });
